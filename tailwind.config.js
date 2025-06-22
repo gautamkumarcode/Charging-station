@@ -1,0 +1,17 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+	content: ["./src/**/*.{js,jsx,ts,tsx}"],
+	theme: {
+		extend: {
+			colors: {
+				bgBlack: "#0E0D0D",
+				secondaryBg: "#161618",
+				bgGray: "#242424",
+				borderColor: "#525252",
+				cardColor: "#222324",
+				text: "#111827", // Dark Gray
+			},
+		},
+	},
+	plugins: [],
+};
