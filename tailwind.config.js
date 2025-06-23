@@ -9,7 +9,7 @@ module.exports = {
 				bgGray: "#242424",
 				borderColor: "#525252",
 				cardColor: "#222324",
-				text: "#111827", // Dark Gray
+				SecondayText: "#C9FF3B", // Dark Gray
 			},
 		},
 	},

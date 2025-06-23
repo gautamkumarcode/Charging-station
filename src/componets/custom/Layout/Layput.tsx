@@ -5,14 +5,14 @@ type Props = {
 	children: React.ReactNode;
 };
 
-const Layput = (props: Props) => {
+const Layout = (props: Props) => {
 	return (
 		<div className="flex flex-col h-screen bg-bgBlack text-white">
 			<Navbar />
-			<div className="flex h-screen">
+			<div className="flex ">
 				<Sidebar />
 
-				<div className="flex flex-col bg-secondaryBg w-full">
+				<div className="flex flex-col h-[90vh] overflow-y-scroll bg-secondaryBg w-full overflow-hidden">
 					{props.children}
 				</div>
 			</div>
@@ -20,4 +20,4 @@ const Layput = (props: Props) => {
 	);
 };
 
-export default Layput;
+export default Layout;
