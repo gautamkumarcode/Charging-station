@@ -1,20 +1,23 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
+if (!process.env.REACT_APP_FIREBASE_API_KEY) {
+	throw new Error(
+		"Firebase API key is not defined. Please set REACT_APP_FIREBASE_API_KEY in your environment variables."
+	);
+}
+
 const firebaseConfig = {
-	apiKey: "AIzaSyC4WYJITaj_UlYXARJ_kUeJud2WcJnh2JY",
-	authDomain: "charging-station-16e63.firebaseapp.com",
-	projectId: "charging-station-16e63",
-	storageBucket: "charging-station-16e63.firebasestorage.app",
-	messagingSenderId: "668360222372",
-	appId: "1:668360222372:web:a3b11e4232572cd35ee831",
-	measurementId: "G-RC4KW63TYW",
+	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+	authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+	projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+	storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDERID,
+	appId: process.env.REACT_APP_FIREBASE_APPID,
+	measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
-
 export default app;
