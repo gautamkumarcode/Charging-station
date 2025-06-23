@@ -8,10 +8,12 @@ import {
 	CircleQuestionMark,
 	Edit,
 	Ellipsis,
+	Loader,
 	Plus,
 	RefreshCw,
 	Upload,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
 	CartesianGrid,
 	Line,
@@ -28,13 +30,11 @@ import {
 	loadDataPoints,
 	toggleVariablesPanel,
 } from "../../store/slices/dashboardSlice";
-import VariableEditorPanel from "./VariableEditingSlideOver";
 
 export function DashboardScreen() {
-	const { filteredDataPoints, variables, loading, isVariablesPanelOpen } =
-		useAppSelector((state) => state.dashboard);
-	const [showSlideOver, setShowSlideOver] = useState<boolean>(false);
+	const { loading, dataPoints } = useAppSelector((state) => state.dashboard);
 	const [showBestScenario, setShowBestScenario] = useState<boolean>(true);
+	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 
@@ -43,15 +43,7 @@ export function DashboardScreen() {
 		dispatch(loadDataPoints());
 	}, [dispatch]);
 
-	const chartData = [
-		{ month: "Apr", value: 20000 },
-		{ month: "May", value: 10000 },
-		{ month: "Jun", value: 60000 },
-		{ month: "Jul", value: 90000 },
-		{ month: "Aug", value: 10000 },
-		{ month: "Sep", value: 100000 },
-		{ month: "Oct", value: 45000 },
-	];
+	const chartData = dataPoints;
 
 	const kpiCards = [
 		{
@@ -78,29 +70,30 @@ export function DashboardScreen() {
 
 	if (loading) {
 		return (
-			<div className="mx-auto p-6 flex items-center justify-center h-96">
-				<div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-			</div>
+			<Layout>
+				<div className="flex justify-center items-center h-screen text-white">
+					<Loader className="animate-spin h-8 w-8" />
+				</div>
+			</Layout>
 		);
 	}
 
 	return (
 		<Layout>
-			{isVariablesPanelOpen && <VariableEditorPanel />}
 			<div className=" bg-secondaryBg text-white p-6 space-y-6">
 				<div className="flex items-center justify-between">
 					<h1 className="text-2xl font-bold">⚡ Charging Station</h1>
 					<div className="flex items-center space-x-2">
-						<button className="bg-gray-800 px-4 py-2 rounded-md hover:bg-gray-700">
+						<button className="bg-bgGray px-4 py-2 rounded-md hover:bg-bgGray">
 							<RefreshCw size={16} />
 						</button>
 						<button
-							className="bg-gray-800 px-4 py-2 rounded-md flex items-center space-x-2 hover:bg-gray-700"
+							className="bg-bgGray px-4 py-2 rounded-md flex items-center space-x-2 hover:bg-gray-700"
 							onClick={() => dispatch(toggleVariablesPanel())}>
 							<Edit size={16} />
 							<span className="text-sm">Edit Variables</span>
 						</button>
-						<button className="bg-gray-800 px-4 py-2 rounded-md hover:bg-gray-700">
+						<button className="bg-bgGray px-4 py-2 rounded-md hover:bg-gray-700">
 							<Upload size={16} />
 						</button>
 					</div>
@@ -161,6 +154,16 @@ export function DashboardScreen() {
 							<ResponsiveContainer width="100%" height="100%">
 								<LineChart
 									data={chartData}
+									onClick={(e) => {
+										const activePayload = e?.activePayload?.[0];
+										if (activePayload) {
+											const clickedId = activePayload.payload.id;
+											console.log(clickedId);
+											if (clickedId) {
+												navigate(`/details/${clickedId}`);
+											}
+										}
+									}}
 									margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
 									<CartesianGrid strokeDasharray="3 3" stroke="#333" />
 									<XAxis dataKey="month" stroke="#888" />
@@ -192,7 +195,9 @@ export function DashboardScreen() {
 							<h3 className="text-lg font-semibold">
 								Key Performance Indicators
 							</h3>
-							<button className="border border-borderColor rounded-md p-2 hover:bg-borderColor hover:text-white transition-colors ">
+							<button
+								onClick={() => navigate("/variables")}
+								className="border border-borderColor rounded-md p-2 hover:bg-borderColor hover:text-white transition-colors ">
 								Variable <Plus size={16} className="inline-block ml-2" />
 							</button>
 						</div>
